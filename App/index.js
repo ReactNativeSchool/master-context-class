@@ -7,6 +7,7 @@ import Splash from "./screens/Splash";
 import SignIn from "./screens/SignIn";
 import Profile from "./screens/Profile";
 import Home from "./screens/Home";
+import { AuthContext } from "./util/AuthManager";
 
 const BottomTabs = createBottomTabNavigator();
 const Tabs = () => (
@@ -37,21 +38,30 @@ const App = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  const signIn = () => {
+    setSignedIn(true);
+  };
+  const signOut = () => {
+    setSignedIn(false);
+  };
+
   if (!checkedAuth) {
     return <Splash />;
   }
 
   return (
-    <AppStack.Navigator
-      headerMode="none"
-      screenOptions={{ animationEnabled: false }}
-    >
-      {isSignedIn ? (
-        <AppStack.Screen name="Tabs" component={Tabs} />
-      ) : (
-        <AppStack.Screen name="Auth" component={Auth} />
-      )}
-    </AppStack.Navigator>
+    <AuthContext.Provider value={{ signIn, signOut }}>
+      <AppStack.Navigator
+        headerMode="none"
+        screenOptions={{ animationEnabled: false }}
+      >
+        {isSignedIn ? (
+          <AppStack.Screen name="Tabs" component={Tabs} />
+        ) : (
+          <AppStack.Screen name="Auth" component={Auth} />
+        )}
+      </AppStack.Navigator>
+    </AuthContext.Provider>
   );
 };
 
