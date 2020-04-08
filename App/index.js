@@ -25,12 +25,32 @@ const Auth = () => (
 
 const AppStack = createStackNavigator();
 const App = () => {
-  return <Splash />;
+  const [checkedAuth, setCheckedAuth] = useState(false);
+  const [isSignedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCheckedAuth(true);
+      setSignedIn(Math.random() < 0.5);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (!checkedAuth) {
+    return <Splash />;
+  }
 
   return (
-    <AppStack.Navigator headerMode="none">
-      <AppStack.Screen name="Auth" component={Auth} />
-      <AppStack.Screen name="Tabs" component={Tabs} />
+    <AppStack.Navigator
+      headerMode="none"
+      screenOptions={{ animationEnabled: false }}
+    >
+      {isSignedIn ? (
+        <AppStack.Screen name="Tabs" component={Tabs} />
+      ) : (
+        <AppStack.Screen name="Auth" component={Auth} />
+      )}
     </AppStack.Navigator>
   );
 };
