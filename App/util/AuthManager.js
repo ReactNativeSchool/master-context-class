@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [checkedAuth, setCheckedAuth] = useState(false);
   const [isSignedIn, setSignedIn] = useState(false);
+  const [user, setUser] = useState();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -17,13 +18,19 @@ export const AuthContextProvider = ({ children }) => {
 
   const signIn = () => {
     setSignedIn(true);
+    setUser({
+      name: "Spencer",
+    });
   };
   const signOut = () => {
     setSignedIn(false);
+    setUser();
   };
 
   return (
-    <AuthContext.Provider value={{ checkedAuth, isSignedIn, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ checkedAuth, isSignedIn, signIn, signOut, user }}
+    >
       {children}
     </AuthContext.Provider>
   );
