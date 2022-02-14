@@ -10,7 +10,11 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setCheckedAuth(true);
-      setSignedIn(Math.random() < 0.5);
+      if (Math.random() < 0.5) {
+        signIn();
+      } else {
+        signOut();
+      }
     }, 500);
 
     return () => clearTimeout(timeout);
